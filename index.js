@@ -149,7 +149,7 @@
   
   var scenesById = {};
   scenes.forEach(function(s) { scenesById[s.data.id] = s; });
-  var TOP_ORDER = ["MAYA", "MOON", "DOMUS", "8TH FLOOR", "ORTO", "GYM", "416", "LOBBY"];
+  var TOP_ORDER = ["MAYA", "MOON", "DOMUS", "8TH FLOOR", "ORTO", "GYM", "416", "LOBBY", "RAMO"];
   var parentSceneData = TOP_ORDER.map(function(name) {
     for (var i = 0; i < data.scenes.length; i++) {
       var d = data.scenes[i];
