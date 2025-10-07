@@ -1136,7 +1136,7 @@ var APP_DATA = {
       "name": "RAMO",
       "faceSize": 2976,
       "initialViewParameters": { "pitch": 0, "yaw": 0, "fov": 1.5707963267948966 },
-      "imageUrl": "IMG_20251007_173729_00_089.jpg",
+      "imageUrl": "img/ramo/IMG_20251007_173729_00_089.jpg",
       "linkHotspots": [
         { "yaw": 0.0, "pitch": 0.05, "rotation": 0, "target": "25-ramo-2" }
       ],
@@ -1148,7 +1148,7 @@ var APP_DATA = {
       "name": "RAMO 2",
       "faceSize": 2976,
       "initialViewParameters": { "pitch": 0, "yaw": 0, "fov": 1.5707963267948966 },
-      "imageUrl": "IMG_20251007_173749_00_090.jpg",
+      "imageUrl": "img/ramo/IMG_20251007_173749_00_090.jpg",
       "linkHotspots": [
         { "yaw": 0.0, "pitch": 0.05, "rotation": 0, "target": "24-ramo" }
       ],
