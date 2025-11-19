@@ -7,6 +7,17 @@
   <style>@-ms-viewport { width: device-width; }</style>
   <link rel="stylesheet" href="vendor/reset.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://docs.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://docs.google.com">
+  <link rel="preconnect" href="https://epleasure.it" crossorigin>
+  <link rel="dns-prefetch" href="https://epleasure.it">
+  <link rel="preconnect" href="https://api.qrserver.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.qrserver.com">
+  <link rel="preconnect" href="https://www.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.google.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="preconnect" href="https://api.qrserver.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.qrserver.com">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6QDRLD6244"></script>
   <script>
@@ -20,7 +31,6 @@
 <body class="multiple-scenes">
   <script>if (!window.location.hash) { window.location.replace(window.location.href + '#maya'); }</script>
 
-  <!-- Loading spinner overlay -->
   <div id="spinner" style="display:none;">
     <div class="loader"></div>
   </div>
@@ -37,13 +47,47 @@
       <a href="javascript:void(0)" class="scene" data-id="4-gym"><li class="text">GYM</li></a>
       <a href="javascript:void(0)" class="scene" data-id="0-416first"><li class="text">416</li></a>
       <a href="javascript:void(0)" class="scene" data-id="6-lobby"><li class="text">LOBBY</li></a>
+
+      <li class="menu-list-section" id="menuSection">
+        <div class="menu-header text">MENU</div>
+        <div class="menu-buttons">
+          <button class="menu-list-button" data-lang="ITA" data-url="https://epleasure.it/restaurants/uploads/7/MENU%20ROOF%202025%20(15).pdf">Menu ITA</button>
+          <button class="menu-list-button" data-lang="ENG" data-url="https://epleasure.it/restaurants/uploads/7/ENG%20ROOF%202025%20(15).pdf">Menu ENG</button>
+        </div>
+      </li>
+      
+      <li class="menu-list-section collapsible" id="directionsSection">
+        <div class="menu-header text collapsible-header" aria-label="Indicazioni" title="Indicazioni">
+          <span class="icon-header" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M12 2c-3.314 0-6 2.686-6 6 0 4.418 6 12 6 12s6-7.582 6-12c0-3.314-2.686-6-6-6zm0 8.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+          </span>
+        </div>
+        <div class="menu-buttons collapsible-content">
+          <button class="menu-list-button dir-open" data-label="Colosseo" data-lat="41.8902" data-lng="12.4923">Colosseo</button>
+          <button class="menu-list-button dir-open" data-label="Trevi" data-lat="41.9009" data-lng="12.4833">Trevi</button>
+          <button class="menu-list-button dir-open" data-label="Pantheon" data-lat="41.8986" data-lng="12.4768">Pantheon</button>
+          <button class="menu-list-button dir-open" data-label="P.zza Navona" data-lat="41.8992" data-lng="12.4731">P.zza Navona</button>
+          <button class="menu-list-button dir-open" data-label="San Pietro" data-lat="41.9022" data-lng="12.4539">San Pietro</button>
+        </div>
+      </li>
+      <li class="menu-list-section collapsible" id="supportSection">
+        <div class="menu-header text collapsible-header" aria-label="Assistenza" title="Assistenza">
+          <span class="icon-header" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M20 2H4a2 2 0 00-2 2v14l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z"/></svg>
+          </span>
+        </div>
+        <div class="menu-buttons collapsible-content">
+          <button id="tawkButton" class="menu-list-button">Attiva chat</button>
+        </div>
+      </li>
     </ul>
   </div>
 
   <div id="titleBar">
-    <a href="/" id="logoLink"><img id="logo" src="img/FDEEEB8F-E8DD-409C-9FB0-AD820ED8AEED.PNG" alt="Venue Logo"></a>
+    <a href="./" id="logoLink"><img id="logo" src="img/FDEEEB8F-E8DD-409C-9FB0-AD820ED8AEED.PNG" alt="Venue Logo"></a>
     <h1 class="sceneName"></h1>
     <button id="shareButton" class="share-button" title="Copy share link">🔗</button>
+    <button id="qrButton" class="share-button" title="Wi‑Fi">Wi‑Fi</button>
   </div>
 
   <a href="javascript:void(0)" id="autorotateToggle">
@@ -68,7 +112,6 @@
   <a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5"><img class="icon" src="img/plus.png"></a>
   <a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6"><img class="icon" src="img/minus.png"></a>
 
-  <!-- View Selector -->
   <div id="colorSelector">
     <span style="font-weight:bold;margin-right:10px;">View:</span>
     <span id="variantButtons"></span>
@@ -77,23 +120,423 @@
   <script src="vendor/screenfull.min.js"></script>
   <script src="vendor/bowser.min.js"></script>
   <script src="vendor/marzipano.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <script src="data.js?v=3"></script>
   <script src="index.js?v=3"></script>
 
-  <!-- Start of Tawk.to Script -->
-  <script type="text/javascript">
-  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-  (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/5aaf9c2bd7591465c708b038/1impge3p1';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-  })();
+  <div id="pdfOverlay" aria-hidden="true" style="display:none;">
+    <div class="pdf-viewer">
+      <div class="pdf-viewer-header">
+        <span id="pdfTitle">Menu</span>
+        <div class="pdf-actions">
+          <button id="pdfClose" class="pdf-close-btn" aria-label="Chiudi">✕</button>
+        </div>
+      </div>
+      <div id="pdfFrames" class="pdf-frames"></div>
+      <div id="pdfLoading" class="pdf-loading">Caricamento…</div>
+    </div>
+  </div>
+
+  <div id="qrOverlay" aria-hidden="true" style="display:none;">
+    <div class="qr-viewer">
+      <div class="qr-viewer-header">
+        <span>Wi‑Fi dell'hotel</span>
+        <button id="qrClose" class="pdf-close-btn" aria-label="Chiudi">✕</button>
+      </div>
+      <div class="qr-body">
+        <img id="qrImage" alt="QR code" />
+        <div class="qr-url" id="qrUrl"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="directionsOverlay" aria-hidden="true" style="display:none;">
+    <div class="dir-viewer">
+      <div class="dir-viewer-header">
+        <span id="dirTitle">Mappa</span>
+        <div class="dir-actions">
+          <button class="dir-mode" data-mode="walking" title="A piedi">🚶</button>
+          <button class="dir-mode" data-mode="driving" title="In auto">🚗</button>
+          <button id="dirTransit" class="dir-transit" title="Trasporti (tram)">🚋</button>
+          <button id="dirQrToggle" class="dir-qr-toggle" title="Mostra QR">QR</button>
+          <button id="dirClose" class="pdf-close-btn" aria-label="Chiudi">✕</button>
+        </div>
+      </div>
+      <div id="dirMap"></div>
+      <div id="dirQr" class="dir-qr" style="display:none;">
+        <img id="dirQrImg" alt="QR Google Maps" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function makeViewerUrl(url) {
+        return 'https://drive.google.com/viewerng/viewer?embedded=true&url=' + encodeURIComponent(url);
+      }
+
+      var overlay = document.getElementById('pdfOverlay');
+      var framesContainer = document.getElementById('pdfFrames');
+      var loadingEl = document.getElementById('pdfLoading');
+      var titleEl = document.getElementById('pdfTitle');
+      var closeBtn = document.getElementById('pdfClose');
+
+      var preloadMap = {};
+
+      function ensurePreloaded(key, url) {
+        if (preloadMap[key]) return preloadMap[key];
+        var iframe = document.createElement('iframe');
+        iframe.title = 'PDF ' + key;
+        iframe.className = 'pdf-frame';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.style.display = 'none';
+        iframe.onload = function(){ iframe.dataset.loaded = '1'; };
+        iframe.src = makeViewerUrl(url);
+        framesContainer.appendChild(iframe);
+        preloadMap[key] = iframe;
+        return iframe;
+      }
+
+      function showFrame(iframe) {
+        Array.prototype.forEach.call(framesContainer.children, function(ch){ ch.style.display = 'none'; });
+        if (iframe.dataset.loaded === '1') {
+          loadingEl.style.display = 'none';
+        } else {
+          loadingEl.style.display = 'block';
+          iframe.addEventListener('load', function onl(){
+            loadingEl.style.display = 'none';
+            iframe.removeEventListener('load', onl);
+          });
+        }
+        iframe.style.display = 'block';
+      }
+
+      function openPdf(title, url, key) {
+        titleEl.textContent = title;
+        var frame = ensurePreloaded(key, url);
+        overlay.style.display = 'block';
+        overlay.setAttribute('aria-hidden', 'false');
+        showFrame(frame);
+      }
+
+      function closePdf(e) {
+        if (e) { e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+
+      closeBtn.addEventListener('click', closePdf);
+      overlay.addEventListener('click', function(e){ if (e.target === overlay) closePdf(e); });
+
+      var buttons = document.querySelectorAll('#menuSection .menu-list-button');
+      buttons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var lang = btn.getAttribute('data-lang');
+          var url = btn.getAttribute('data-url');
+          if (!url) { return; }
+          openPdf('Menu ' + (lang || ''), url, (lang || ''));
+        });
+      });
+
+      
+      function backgroundPreload(){
+        var itUrl = 'https://epleasure.it/restaurants/uploads/7/MENU%20ROOF%202025%20(15).pdf';
+        var enUrl = 'https://epleasure.it/restaurants/uploads/7/ENG%20ROOF%202025%20(15).pdf';
+        ensurePreloaded('ITA', itUrl);
+        ensurePreloaded('ENG', enUrl);
+      }
+      setTimeout(backgroundPreload, 2500);
+      ['pointerdown','touchstart','mousemove','keydown','wheel'].forEach(function(evt){
+        window.addEventListener(evt, function once(){
+          backgroundPreload();
+          window.removeEventListener(evt, once, { capture: false });
+        }, { passive: true, capture: false, once: true });
+      });
+
+      
+      var qrBtn = document.getElementById('qrButton');
+      var qrOverlay = document.getElementById('qrOverlay');
+      var qrClose = document.getElementById('qrClose');
+      var qrImg = document.getElementById('qrImage');
+      var qrUrl = document.getElementById('qrUrl');
+      window.GHPAGES_URL = window.GHPAGES_URL || '';
+      window.HOTEL_ORIGIN = window.HOTEL_ORIGIN || { lat: 41.8801021, lng: 12.466204 };
+
+      function openQr() {
+        
+        var size = Math.min(window.innerWidth, window.innerHeight) > 700 ? 280 : 220;
+        var wifiPayload = 'WIFI:T:WPA;S:Trilussa;P:Trilussa2527;;';
+        var api = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(wifiPayload);
+        qrImg.src = api;
+        qrUrl.textContent = 'SSID: Trilussa  •  Password: Trilussa2527';
+        qrOverlay.style.display = 'block';
+        qrOverlay.setAttribute('aria-hidden', 'false');
+      }
+      function closeQr(e) {
+        if (e) { e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }
+        qrOverlay.style.display = 'none';
+        qrOverlay.setAttribute('aria-hidden', 'true');
+      }
+      if (qrBtn) qrBtn.addEventListener('click', openQr);
+      if (qrClose) qrClose.addEventListener('click', closeQr);
+      if (qrOverlay) qrOverlay.addEventListener('click', function(e){ if (e.target === qrOverlay) closeQr(); });
+
+      
+      var tawkLoaded = false;
+      var tawkBtn = document.getElementById('tawkButton');
+      var TAWK_AUTO_HIDE_MS = 90000;
+      var tawkHideTimer = null;
+
+      function hideTawk() {
+        try {
+          if (window.Tawk_API) {
+            if (Tawk_API.minimize) Tawk_API.minimize();
+            else if (Tawk_API.hideWidget) Tawk_API.hideWidget();
+          }
+        } catch(e){}
+      }
+
+      function scheduleTawkAutoHide() {
+        try { clearTimeout(tawkHideTimer); } catch(e){}
+        tawkHideTimer = setTimeout(hideTawk, TAWK_AUTO_HIDE_MS);
+      }
+
+      function showTawkWidgetReliable() {
+        
+        try {
+          var po = document.getElementById('pdfOverlay'); if (po) { po.style.display = 'none'; po.setAttribute('aria-hidden','true'); }
+          var qo = document.getElementById('qrOverlay'); if (qo) { qo.style.display = 'none'; qo.setAttribute('aria-hidden','true'); }
+          var dover = document.getElementById('directionsOverlay'); if (dover) { dover.style.display = 'none'; dover.setAttribute('aria-hidden','true'); }
+        } catch(e){}
+        
+        var tries = 0;
+        var iv = setInterval(function(){
+          tries++;
+          try {
+            if (window.Tawk_API && Tawk_API.showWidget) {
+              Tawk_API.showWidget();
+              clearInterval(iv);
+              scheduleTawkAutoHide();
+              return;
+            }
+          } catch(e){}
+          if (tries > 50) { clearInterval(iv); }
+        }, 100);
+      }
+
+      function loadTawk() {
+        if (tawkLoaded) {
+          showTawkWidgetReliable();
+          return;
+        }
+        window.Tawk_API = window.Tawk_API || {};
+        window.Tawk_LoadStart = new Date();
+        var s1 = document.createElement('script');
+        var s0 = document.getElementsByTagName('script')[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5aaf9c2bd7591465c708b038/1j9n1qm96';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s1.onload = function(){
+          tawkLoaded = true;
+          showTawkWidgetReliable();
+        };
+        s0.parentNode.insertBefore(s1, s0);
+      }
+      if (tawkBtn) tawkBtn.addEventListener('click', loadTawk);
+
+      function setupCollapsible(id) {
+        var root = document.getElementById(id);
+        if (!root) return;
+        var header = root.querySelector('.collapsible-header');
+        var content = root.querySelector('.collapsible-content');
+        if (!content || !header) return;
+        content.style.display = 'none';
+        header.addEventListener('click', function(){
+          var open = content.style.display === 'block';
+          content.style.display = open ? 'none' : 'block';
+          root.classList.toggle('open', !open);
+        });
+      }
+      setupCollapsible('directionsSection');
+      setupCollapsible('supportSection');
+      
+
+      
+      var dirOverlay = document.getElementById('directionsOverlay');
+      var dirTitle = document.getElementById('dirTitle');
+      var dirClose = document.getElementById('dirClose');
+      var dirQrToggle = document.getElementById('dirQrToggle');
+      var dirQr = document.getElementById('dirQr');
+      var dirQrImg = document.getElementById('dirQrImg');
+      var dirMapEl = document.getElementById('dirMap');
+      var dirMap = null;
+      var dirLayer = null;
+      var markers = [];
+      var dirMode = 'walking';
+      var currentDest = null;
+      function mapsModeFor(mode) { return mode === 'driving' ? 'driving' : 'walking'; }
+      function buildMapsUrl(label, dest) {
+        var url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(label + ', Roma') + '&travelmode=' + mapsModeFor(dirMode);
+        if (window.HOTEL_ORIGIN && window.HOTEL_ORIGIN.lat && window.HOTEL_ORIGIN.lng) {
+          url += '&origin=' + encodeURIComponent(window.HOTEL_ORIGIN.lat + ',' + window.HOTEL_ORIGIN.lng);
+        }
+        return url;
+      }
+      function updateDirQr(label, dest) {
+        var url = buildMapsUrl(label, dest);
+        var size = 220;
+        dirQrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(url);
+      }
+      function initDirMap() {
+        if (dirMap) return;
+        dirMap = L.map(dirMapEl, { zoomControl: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap'
+        }).addTo(dirMap);
+      }
+      function clearDirMap() {
+        if (!dirMap) return;
+        if (dirLayer) { dirMap.removeLayer(dirLayer); dirLayer = null; }
+        markers.forEach(function(m){ dirMap.removeLayer(m); });
+        markers = [];
+      }
+      
+      window.TRAM3_STOP = window.TRAM3_STOP || { lat: 41.880417, lng: 12.466933, name: 'Ippolito Nievo' };
+      var dirTransitBtn = document.getElementById('dirTransit');
+
+      function metersToReadable(m) {
+        if (m < 1000) return Math.round(m) + ' m';
+        return (m/1000).toFixed(2) + ' km';
+      }
+
+      function buildTransitUrl() {
+        var origin = window.HOTEL_ORIGIN && window.HOTEL_ORIGIN.lat ? { lat: parseFloat(window.HOTEL_ORIGIN.lat), lng: parseFloat(window.HOTEL_ORIGIN.lng) } : null;
+        if (!origin || !currentDest) return '';
+        return 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(origin.lat + ',' + origin.lng) + '&destination=' + encodeURIComponent(currentDest.label + ', Roma') + '&travelmode=transit';
+      }
+
+      if (dirTransitBtn) dirTransitBtn.addEventListener('click', function(){
+        
+        var visible = dirQr.style.display === 'block';
+        var url = buildTransitUrl();
+        if (!visible || (dirQrImg && !dirQrImg.src.includes(encodeURIComponent(url)))) {
+          var size = 220;
+          dirQrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(url);
+          dirQr.style.display = 'block';
+        } else {
+          dirQr.style.display = 'none';
+        }
+      });
+
+      function openDirections(label, lat, lng) {
+        dirTitle.textContent = label;
+        var destination = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        currentDest = { label: label, dest: destination };
+        updateDirQr(label, destination);
+        setActiveModeButton();
+        dirOverlay.style.display = 'block';
+        dirOverlay.setAttribute('aria-hidden', 'false');
+        initDirMap();
+        clearDirMap();
+        
+        
+        var destMarker = L.marker([destination.lat, destination.lng]).addTo(dirMap);
+        markers.push(destMarker);
+        
+        function drawRoute(origin) {
+          var origMarker = L.marker([origin.lat, origin.lng]).addTo(dirMap);
+          markers.push(origMarker);
+          
+          
+          var profiles = (dirMode === 'driving') ? ['driving', 'car'] : ['walking', 'foot'];
+          function tryProfiles(i) {
+            if (i >= profiles.length) {
+              dirTitle.textContent = label + ' • percorso non disponibile';
+              
+              var group = L.featureGroup(markers);
+              dirMap.fitBounds(group.getBounds().pad(0.25));
+              return;
+            }
+            var profile = profiles[i];
+            var url = 'https://router.project-osrm.org/route/v1/' + profile + '/' + origin.lng + ',' + origin.lat + ';' + destination.lng + ',' + destination.lat + '?overview=full&geometries=geojson';
+            fetch(url).then(function(r){ return r.json(); }).then(function(json){
+              if (json && json.routes && json.routes[0]) {
+                var route = json.routes[0];
+                var coords = route.geometry.coordinates.map(function(c){ return [c[1], c[0]]; });
+                dirLayer = L.polyline(coords, { color: (dirMode === 'driving') ? '#4caf50' : '#00bcd4', weight: 5, opacity: 0.9 }).addTo(dirMap);
+                var group = L.featureGroup(markers.concat([dirLayer]));
+                dirMap.fitBounds(group.getBounds().pad(0.25));
+                var distKmNum = (route.distance/1000);
+                var distKm = distKmNum.toFixed(2);
+                
+                var speedKmh = (dirMode === 'driving') ? 18.0 : 4.0;
+                var mins = ((distKmNum / speedKmh) * 60).toFixed(1);
+                dirTitle.textContent = label + ' • ' + distKm + ' km • ' + mins + ' min';
+              } else {
+                tryProfiles(i+1);
+              }
+            }).catch(function(){ tryProfiles(i+1); });
+          }
+          tryProfiles(0);
+        }
+        if (window.HOTEL_ORIGIN && window.HOTEL_ORIGIN.lat && window.HOTEL_ORIGIN.lng) {
+          drawRoute({ lat: parseFloat(window.HOTEL_ORIGIN.lat), lng: parseFloat(window.HOTEL_ORIGIN.lng) });
+        } else if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos){
+            drawRoute({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          }, function(){
+            dirMap.setView([destination.lat, destination.lng], 15);
+          }, { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 });
+        } else {
+          dirMap.setView([destination.lat, destination.lng], 15);
+        }
+      }
+      function closeDirections(e) {
+        if (e) { e.preventDefault && e.preventDefault(); e.stopPropagation && e.stopPropagation(); }
+        dirOverlay.style.display = 'none';
+        dirOverlay.setAttribute('aria-hidden', 'true');
+        clearDirMap();
+      }
+      if (dirClose) dirClose.addEventListener('click', closeDirections);
+      if (dirOverlay) dirOverlay.addEventListener('click', function(e){ if (e.target === dirOverlay) closeDirections(e); });
+      document.querySelectorAll('.dir-open').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          openDirections(btn.dataset.label, btn.dataset.lat, btn.dataset.lng);
+        });
+      });
+
+      
+      var modeButtons = Array.prototype.slice.call(document.querySelectorAll('.dir-mode'));
+      function setActiveModeButton() {
+        modeButtons.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-mode') === dirMode); });
+      }
+      modeButtons.forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var newMode = btn.getAttribute('data-mode');
+          if (newMode === dirMode) return;
+          dirMode = newMode;
+          setActiveModeButton();
+          if (currentDest) {
+            
+            openDirections(currentDest.label, currentDest.dest.lat, currentDest.dest.lng);
+            
+            dirQr.style.display = 'block';
+            updateDirQr(currentDest.label, currentDest.dest);
+          }
+        });
+      });
+      if (dirQrToggle) dirQrToggle.addEventListener('click', function(){
+        var isOpen = dirQr.style.display === 'block';
+        dirQr.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen && currentDest) updateDirQr(currentDest.label, currentDest.dest);
+      });
+
+      
+    })();
   </script>
-  <!-- End of Tawk.to Script -->
 
 </body>
 </html>

@@ -21,6 +21,12 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
+  // Kiosk settings
+  var KIOSK_IDLE_MS = 90000; // 90s inactivity to reset
+  var idleTimer = null;
+  var wakeLock = null;
+  var defaultSceneObj = null;
+
   var panoElement = document.querySelector('#pano');
   var sceneNameElement = document.querySelector('#titleBar .sceneName');
   var sceneListElement = document.querySelector('#sceneList');
@@ -149,6 +155,13 @@
   
   var scenesById = {};
   scenes.forEach(function(s) { scenesById[s.data.id] = s; });
+  // Determine default scene (prefer slug 'maya' if present)
+  try {
+    var defaultId = slugToId['maya'] || (parentScenes[0] && parentScenes[0].data.id) || (data.scenes[0] && data.scenes[0].id);
+    defaultSceneObj = scenesById[defaultId] || parentScenes[0] || scenes[0];
+  } catch (e) {
+    defaultSceneObj = scenes[0];
+  }
   var TOP_ORDER = ["MAYA", "MOON", "DOMUS", "8TH FLOOR", "ORTO", "GYM", "416", "LOBBY", "RAMO"];
   var parentSceneData = TOP_ORDER.map(function(name) {
     for (var i = 0; i < data.scenes.length; i++) {
@@ -205,9 +218,7 @@
 
   sceneListToggleElement.addEventListener('click', toggleSceneList);
 
-  if (!document.body.classList.contains('mobile')) {
-    showSceneList();
-  }
+  // Keep scene list hidden by default; user can open via toggle
 
 
   var viewUpElement = document.querySelector('#viewUp');
@@ -252,6 +263,13 @@
       var slug = idToSlug[scene.data.id] || scene.data.id;
       window.history.replaceState(null, '', '#' + slug);
     } catch (e) {}
+    // Minimize/hide Tawk chat on scene change if present
+    try {
+      if (window.Tawk_API && (Tawk_API.minimize || Tawk_API.hideWidget)) {
+        if (Tawk_API.minimize) Tawk_API.minimize(); else Tawk_API.hideWidget();
+      }
+    } catch (e) {}
+    resetIdleTimer();
   }
 
   function updateSceneName(scene) {
@@ -420,6 +438,92 @@
       startAutorotate();
     }
   }
+
+  // ----- Kiosk helpers -----
+  function closeOverlaysAndPanels() {
+    try {
+      // Close info-hotspot modals
+      var modals = document.querySelectorAll('.info-hotspot-modal.visible');
+      modals.forEach(function(m) { m.classList.remove('visible'); });
+      var infos = document.querySelectorAll('.info-hotspot.visible');
+      infos.forEach(function(i) { i.classList.remove('visible'); });
+    } catch (e) {}
+    // Hide scene list on idle (optional)
+    try { hideSceneList(); } catch (e) {}
+    // Close PDF overlay if open
+    var overlay = document.getElementById('pdfOverlay');
+    if (overlay && overlay.style.display !== 'none') {
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden', 'true');
+      var frame = document.getElementById('pdfFrame');
+      if (frame) frame.src = '';
+    }
+    // Close QR overlay if open
+    var qr = document.getElementById('qrOverlay');
+    if (qr && qr.style.display !== 'none') {
+      qr.style.display = 'none';
+      qr.setAttribute('aria-hidden', 'true');
+    }
+    // Close Directions overlay if open
+    var dir = document.getElementById('directionsOverlay');
+    if (dir && dir.style.display !== 'none') {
+      dir.style.display = 'none';
+      dir.setAttribute('aria-hidden', 'true');
+      // Leaflet map cleanup is handled in inline script's closeDirections
+      try { if (window.closeDirections) window.closeDirections(); } catch(e){}
+    }
+    // Minimize/hide Tawk chat if present
+    try {
+      if (window.Tawk_API && (Tawk_API.minimize || Tawk_API.hideWidget)) {
+        if (Tawk_API.minimize) Tawk_API.minimize(); else Tawk_API.hideWidget();
+      }
+    } catch (e) {}
+  }
+
+  function onIdle() {
+    try {
+      if (defaultSceneObj) {
+        switchScene(defaultSceneObj);
+      }
+      startAutorotate();
+      closeOverlaysAndPanels();
+    } finally {
+      resetIdleTimer();
+    }
+  }
+
+  function resetIdleTimer() {
+    try { clearTimeout(idleTimer); } catch (e) {}
+    idleTimer = setTimeout(onIdle, KIOSK_IDLE_MS);
+  }
+
+  function requestWakeLock() {
+    if (!('wakeLock' in navigator)) return;
+    if (wakeLock) return;
+    try {
+      navigator.wakeLock.request('screen').then(function(lock) {
+        wakeLock = lock;
+        wakeLock.addEventListener('release', function() { wakeLock = null; });
+      }).catch(function(){ /* ignore */ });
+    } catch(e) { /* ignore */ }
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+      requestWakeLock();
+    }
+  });
+
+  // Consider any interaction as activity (also first gesture to request wake lock)
+  ['pointerdown','touchstart','mousemove','keydown','wheel'].forEach(function(evt){
+    window.addEventListener(evt, function(){
+      resetIdleTimer();
+      requestWakeLock();
+    }, { passive: true });
+  });
+
+  // Start idle timer once ready
+  resetIdleTimer();
 
   function createLinkHotspotElement(hotspot) {
 

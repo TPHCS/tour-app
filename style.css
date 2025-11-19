@@ -31,6 +31,280 @@ html, body {
   color: #fff;
 }
 
+#sceneList .menu-list-section {
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+#sceneList .menu-list-section .menu-header {
+  font-weight: bold;
+  margin: 6px 0 10px 0;
+}
+
+#sceneList .menu-list-section .menu-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#menuSection .menu-buttons {
+  flex-direction: column;
+}
+#menuSection .menu-list-button {
+  width: 100%;
+}
+
+#sceneList .menu-list-section .menu-list-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#sceneList .menu-list-section .menu-list-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#sceneList .menu-list-section.collapsible .collapsible-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+}
+#sceneList .menu-list-section.collapsible .collapsible-content { display: none; }
+#sceneList .menu-list-section.collapsible.open .collapsible-content { display: block; }
+
+#sceneList .menu-list-section .icon-header svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  opacity: 0.95;
+}
+
+#pdfOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: none;
+}
+
+#pdfOverlay .pdf-viewer {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+#pdfOverlay .pdf-viewer-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: rgba(58,68,84,0.95);
+  color: #fff;
+}
+
+#pdfOverlay .pdf-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+#pdfOverlay .pdf-close-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+#pdfOverlay .pdf-frames {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 44px);
+  background: #222;
+}
+
+#pdfOverlay .pdf-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#pdfOverlay .pdf-loading {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #pdfOverlay .pdf-viewer {
+    top: 4%;
+    left: 3%;
+    width: 94%;
+    height: 92%;
+  }
+}
+
+#qrOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: none;
+}
+
+#qrOverlay .qr-viewer {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(520px, 92%);
+  background: #111;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#qrOverlay .qr-viewer-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: rgba(58,68,84,0.95);
+}
+
+#qrOverlay .qr-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#qrOverlay #qrImage {
+  width: 280px;
+  height: 280px;
+  max-width: 80vw;
+  max-height: 80vw;
+}
+
+#qrOverlay .qr-url {
+  font-size: 12px;
+  opacity: 0.9;
+  word-break: break-all;
+  text-align: center;
+}
+
+#directionsOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: none;
+}
+
+#directionsOverlay .dir-viewer {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  width: 88%;
+  height: 88%;
+  background: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+#directionsOverlay .dir-viewer-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: rgba(58,68,84,0.95);
+  color: #fff;
+}
+
+#directionsOverlay .dir-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#directionsOverlay .dir-mode,
+#directionsOverlay .dir-qr-toggle {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#directionsOverlay .dir-mode.active {
+  background: #00bcd4;
+  color: #000;
+}
+
+#directionsOverlay .dir-transit {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#directionsOverlay #dirFrame {
+  width: 100%;
+  height: calc(100% - 44px);
+  border: none;
+  background: #222;
+}
+
+#dirMap {
+  width: 100%;
+  height: calc(100% - 44px);
+}
+
+#directionsOverlay .dir-qr {
+  position: absolute;
+  right: 10px;
+  top: 54px;
+  background: rgba(0,0,0,0.6);
+  padding: 8px;
+  border-radius: 6px;
+  z-index: 1500;
+  pointer-events: auto;
+}
+#directionsOverlay .dir-qr img {
+  width: 220px;
+  height: 220px;
+}
+
+
 a, a:hover, a:active, a:visited {
   text-decoration: none;
   color: inherit;
@@ -142,6 +416,20 @@ body.multiple-scenes.mobile #titleBar {
 #shareButton:hover {
   color: #ff0;
 }
+#qrButton {
+  position: absolute;
+  top: 5px;
+  right: 40px;
+  width: 34px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 9000;
+}
+#qrButton:hover { color: #ff0; }
 #sceneList .scene .text {
   display: inline-block;
   vertical-align: middle;
@@ -413,9 +701,9 @@ body.fullscreen-enabled.mobile #autorotateToggle {
 #sceneList {
   position: absolute;
   top: 0;
-  left: -220px;
+  left: -180px;
   padding-top: 40px;
-  width: 220px;
+  width: 180px;
   max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
@@ -449,7 +737,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
 }
 
 #sceneList.enabled {
-  margin-left: 220px;
+  margin-left: 180px;
 }
 
 #sceneList .scene {
@@ -465,7 +753,7 @@ body.fullscreen-enabled.mobile #autorotateToggle {
 #sceneList .scene .text {
   width: 100%;
   height: 100%;
-  padding: 0 15px;
+  padding: 0 10px;
   line-height: 30px;
   overflow: hidden;
   text-overflow: ellipsis;
