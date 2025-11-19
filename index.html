@@ -419,16 +419,10 @@
       }
 
       if (dirTransitBtn) dirTransitBtn.addEventListener('click', function(){
-        
-        var visible = dirQr.style.display === 'block';
         var url = buildTransitUrl();
-        if (!visible || (dirQrImg && !dirQrImg.src.includes(encodeURIComponent(url)))) {
-          var size = 220;
-          dirQrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(url);
-          dirQr.style.display = 'block';
-        } else {
-          dirQr.style.display = 'none';
-        }
+        var size = 220;
+        dirQrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(url);
+        dirQr.style.display = 'block';
       });
 
       function openDirections(label, lat, lng) {
